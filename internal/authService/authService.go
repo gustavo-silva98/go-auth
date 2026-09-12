@@ -11,6 +11,12 @@ type AuthService struct {
 	db db.DB
 }
 
+func NewAuthService(db db.DB) AuthService {
+	return AuthService{
+		db: db,
+	}
+}
+
 func (as *AuthService) HasPermission(route string, userPerms []string) (bool, error) {
 	routePerms, err := as.db.GetPermissionsFromRoute(route)
 	if err != nil {
@@ -18,8 +24,8 @@ func (as *AuthService) HasPermission(route string, userPerms []string) (bool, er
 	}
 	for _, routePerm := range routePerms {
 		if !slices.Contains(userPerms, routePerm) {
-			log.Printf("Usuário não tem a permissão %v", routePerm)
-			return false, fmt.Errorf("Falha ao validar a permissão %v\n", routePerm)
+			log.Printf("User don't have permission %v", routePerm)
+			return false, fmt.Errorf("Failed to validate permission %v\n", routePerm)
 		}
 	}
 	return true, nil
