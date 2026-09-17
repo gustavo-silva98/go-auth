@@ -1,6 +1,7 @@
 package authService
 
 import (
+	"go-auth/internal/db"
 	inmemory "go-auth/internal/db/inMemory"
 	"strings"
 	"sync"
@@ -9,9 +10,10 @@ import (
 
 func NewTestAuthService() *AuthService {
 	perms := map[string][]string{}
+	roleMap := map[string]db.Role{}
 	perms["route"] = []string{"1", "2", "3"}
 	var mu sync.Mutex
-	db := inmemory.NewMemoryDB(perms, &mu)
+	db := inmemory.NewMemoryDB(perms, roleMap, &mu)
 	as := NewAuthService(db)
 	return &as
 }

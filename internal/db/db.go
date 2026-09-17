@@ -1,12 +1,14 @@
 package db
 
-import "context"
+import (
+	"context"
+)
 
 type DB interface {
 	GetPermissionsFromRoute(route string) ([]string, error)
 }
-type RoleDB interface {
-	GetRole(ctx context.Context, roleId string)
+type RoleRepo interface {
+	GetRole(ctx context.Context, roleId string) (Role, error)
 }
 
 type Role struct {

@@ -7,7 +7,7 @@ import (
 )
 
 type RoleBackend struct {
-	db db.RoleDB
+	db db.RoleRepo
 }
 
 func (rb *RoleBackend) GetRoles(w http.ResponseWriter, r *http.Request) {
@@ -15,18 +15,19 @@ func (rb *RoleBackend) GetRoles(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
-	q := r.URL.Query()
-	if q["roleId"] == "" {
-	}
-	roles, err := rb.db.GetRole(r.Context())
+	id := r.URL.Query().Get("ID")
+	role, err := rb.db.GetRole(r.Context(), id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
+	resp := getRoleResponse{
+		Id:          role.Id,
+		Name:        role.Name,
+		Permissions: role.Permissions,
+	}
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(role)
-}
-application/json")
-	json.NewEncoder(w).Encode(role)
+	json.NewEncoder(w).Encode(resp)
+	w.WriteHeader(http.StatusOK)
 }

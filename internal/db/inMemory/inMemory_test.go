@@ -1,6 +1,7 @@
 package inmemory
 
 import (
+	"go-auth/internal/db"
 	"slices"
 	"sync"
 	"testing"
@@ -8,9 +9,10 @@ import (
 
 func testNewMemory() *Memory {
 	perms := map[string][]string{}
+	roleMap := map[string]db.Role{}
 	perms["route"] = []string{"1", "2", "3"}
 	var mu sync.Mutex
-	return NewMemoryDB(perms, &mu)
+	return NewMemoryDB(perms, roleMap, &mu)
 }
 
 func TestGetPermissionsFromRoute(t *testing.T) {
