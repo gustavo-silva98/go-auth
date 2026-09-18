@@ -9,6 +9,7 @@ type DB interface {
 }
 type RoleRepo interface {
 	GetRole(ctx context.Context, roleId string) (Role, error)
+	PutRole(ctx context.Context, role Role) error
 }
 
 type Role struct {

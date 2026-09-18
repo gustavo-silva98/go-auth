@@ -47,3 +47,16 @@ func (m *Memory) GetRole(ctx context.Context, roleId string) (db.Role, error) {
 	}
 	return v, nil
 }
+
+func (m *Memory) PutRole(ctx context.Context, role db.Role) error {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	_, ok := m.permPerRole[role.Id]
+	if ok {
+		log.Printf("Role already exist! - Role: %v", role.Name)
+		return errors.New("Role Already exists!")
+	}
+	m.permPerRole[role.Id] = role
+	return nil
+}
